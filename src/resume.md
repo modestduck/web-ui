@@ -1,6 +1,6 @@
 ## Profile
 
-Spent over 1 year developing the skills to increase velocity, reliability, and quality with a high focus system and application availability.
+Experienced software engineer with the skills required to increase maintainability, reliability, and quality of your companies software products and operations. Current interests include IoT, home automation, climate tech, GitOps, serverless platforms.
 
 ## Technical Skills
 
@@ -31,6 +31,7 @@ Spent over 1 year developing the skills to increase velocity, reliability, and q
 - Docker ✓
 - Kubernetes ✓
 - Jenkins ✓
+- OpenFaaS ↑
 - Unity3D ↓
 
 ## Experience
@@ -65,7 +66,7 @@ Worked on development of software using Unity3D for rapid prototype of user inte
 - Increased physical connection with the product lead to increasingly engaged customers. Project managers would receive much more information during demonstrations.
 - Assist in implementation of CM/CI pipeline using Jenkins and Git instead of internal Unity Verison Control software. This helped developers reduce collisions and reduce the amount of time before a ticket gets merged.
 
-### CARI.net
+### CARI net
 
 #### Jr. Systems Administrator; June 2016 – June 2017
 
@@ -90,7 +91,7 @@ Worked on development of software using Unity3D for rapid prototype of user inte
 
 ## Certificates
 
-- ![Security Plus](../public/secplus60.png) [CompTIA Security+ ce Certification](https://www.youracclaim.com/badges/0955e53b-dbd4-467d-975d-e01b4987c3a4/public_url) 2020 - 2023
+- ![Security Plus](./secplus60.png) [CompTIA Security+ ce Certification](https://www.youracclaim.com/badges/0955e53b-dbd4-467d-975d-e01b4987c3a4/public_url) 2020 - 2023
 
 ## Education
 

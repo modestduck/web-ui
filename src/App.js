@@ -1,53 +1,87 @@
-import React, { useState, useEffect } from "react";
-import ReactMarkdown from "react-markdown";
-import resumePath from "./resume.md";
-import log from "loglevel";
+import React, { useState, useEffect, useReducer } from "react";
 import "./App.css";
+import Header from "./Components/Header";
+import Resume from "./Components/Resume";
+import Footer from "./Components/Footer";
+import { makeStyles } from "@material-ui/core/styles";
+import { Divider } from "@material-ui/core";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Api from "./Data/Api";
+import Client from "./Data/Client";
+import Config from "./Config";
+import resumePath from "./resume.md";
+import { reducer, initialState, ACTION } from "./Data/Reducer";
+import log from "loglevel";
+import { green } from "@material-ui/core/colors";
+
+const visitedPageReaction = "eye";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh",
+  },
+  main: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(2),
+  },
+  footer: {
+    padding: theme.spacing(3, 2),
+    marginTop: "auto",
+    color: green,
+    background: green,
+  },
+}));
+
+const api = new Api(new Client(Config.api));
+
+log.setLevel("debug");
 
 function App() {
-  const [resume, setResume] = useState("");
+  const classes = useStyles();
+
+  const [reactions, dispatch] = useReducer(reducer, initialState);
+  const [markdown, setMarkdown] = useState("");
+
   useEffect(() => {
+    log.info("getting resume");
     fetch(resumePath)
       .then((r) => r.text())
-      .then((t) => setResume(t))
-      .catch((e) => log.error(e));
-  }, [setResume]);
+      .then((t) => {
+        log.debug(t);
+        return t;
+      })
+      .then((t) => setMarkdown(t));
+  }, []);
+
+  useEffect(() => {
+    (function () {
+      api.getReactions().then((data) => {
+        dispatch({ type: ACTION.LOAD_REACTIONS, payload: data });
+        api.postReaction(visitedPageReaction).then(() => {
+          dispatch({ type: ACTION.ADD_REACTION, payload: visitedPageReaction });
+        });
+      });
+    })();
+  }, []);
 
   return (
     <>
-      <div class="headerBar">
-        <div class="avatar"></div>
-        <div class="identify">
-          <div class="name">Miguel Campos</div>
-          <div class="title">Technologist at G2 Software Systems</div>
-        </div>
-        <div class="contact">
-          <div class="email">aModestDuck@gmail.com</div>
-          <div class="hometown">San Diego, CA</div>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <ReactMarkdown source={resume} />
-      <div class="reaction bar">
-        <div class="smile">😀</div>
-        <div class="lmao">🤣</div>
-        <div class="heart">😍</div>
-        <div class="poop">💩</div>
-        <div class="dead">💀</div>
-        <div class="fuck">🤬</div>
-        <div class="money">🤑</div>
-        <div class="vomit">🤢</div>
-        <div class="ice">🥶</div>
-        <div class="mind">🤯</div>
-      </div>
-      <div class="footer">
-        <div class="copyright">© 2020 - Original Content by Miguel Campos</div>
-        <div class="social">
-          <div class="github">www.github.com/ggonryun</div>
-          <div class="linkedin">
-            https://www.linkedin.com/in/miguel-campos-5b1114172/
-          </div>
-        </div>
+      <CssBaseline />
+      <div className={classes.root}>
+        <Header className={classes.header} />
+        <Divider />
+        <Resume markdown={markdown} className={classes.main} />
+        <Divider />
+        <Footer
+          reactions={reactions}
+          onReact={(emoji) => {
+            api.postReaction(emoji).then(() => {
+              dispatch({ type: ACTION.ADD_REACTION, payload: emoji });
+            });
+          }}
+          className={classes.footer}
+        />
       </div>
     </>
   );
