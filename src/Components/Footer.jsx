@@ -1,7 +1,7 @@
 import { Paper, Badge, Typography, Link, Button } from "@material-ui/core";
 import emoji from "emoji-dictionary";
 import React from "react";
-import log from "loglevel";
+
 export default function Footer(props) {
   return (
     <Paper className={props.className}>
