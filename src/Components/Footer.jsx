@@ -31,7 +31,7 @@ function Copyright() {
   return (
     <Typography>
       {"Original Content by "}
-      <Link href="">Miguel Campos ©</Link> {new Date().getFullYear()}
+      <Link href="">Miguel-Angel Campos ©</Link> {new Date().getFullYear()}
       {"."}
     </Typography>
   );
