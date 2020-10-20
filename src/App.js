@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useReducer } from "react";
-import "./App.css";
 import Header from "./Components/Header";
 import Resume from "./Components/Resume";
 import Footer from "./Components/Footer";
-import { makeStyles } from "@material-ui/core/styles";
-import { Divider } from "@material-ui/core";
+import { makeStyles,createMuiTheme, responsiveFontSizes, ThemeProvider  } from "@material-ui/core/styles";
+import { Divider, Paper } from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Api from "./Data/Api";
 import Client from "./Data/Client";
@@ -12,28 +11,42 @@ import Config from "./Config";
 import resumePath from "./resume.md";
 import { reducer, initialState, ACTION } from "./Data/Reducer";
 import log from "loglevel";
-import { green } from "@material-ui/core/colors";
 
-const visitedPageReaction = "eye";
+const api = new Api(new Client(Config.api));
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
+    alignItems: "center",
     minHeight: "100vh",
+    maxWidth: "100vw",
+    minWidth: "90vw",
+    background: "#ECD632"
   },
+
   main: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(2),
+    display: "flex",
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    width: "97.5vw",
   },
-  footer: {
-    padding: theme.spacing(3, 2),
-    marginTop: "auto",
-    color: green,
-    background: green,
+}), {withTheme: true});
+
+const theme = responsiveFontSizes(createMuiTheme({
+  palette: {
+    primary: {
+      main: "#50E6C4",
+    },
+    secondary: {
+      main: "#5AC161",
+    },
+    background:
+    {
+      default: "#50E6C4",
+    }
   },
 }));
 
-const api = new Api(new Client(Config.api));
 
 log.setLevel("debug");
 
@@ -58,20 +71,18 @@ function App() {
     (function () {
       api.getReactions().then((data) => {
         dispatch({ type: ACTION.LOAD_REACTIONS, payload: data });
-        api.postReaction(visitedPageReaction).then(() => {
-          dispatch({ type: ACTION.ADD_REACTION, payload: visitedPageReaction });
-        });
       });
     })();
   }, []);
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className={classes.root}>
-        <Header className={classes.header} />
-        <Divider />
-        <Resume markdown={markdown} className={classes.main} />
+        <Header />
+        <Paper elevation={3} className={classes.main}>
+          <Resume markdown={markdown} />
+        </Paper>
         <Divider />
         <Footer
           reactions={reactions}
@@ -80,10 +91,10 @@ function App() {
               dispatch({ type: ACTION.ADD_REACTION, payload: emoji });
             });
           }}
-          className={classes.footer}
         />
       </div>
-    </>
+    </ThemeProvider>
+
   );
 }
 
