@@ -48,7 +48,7 @@ const theme = responsiveFontSizes(createMuiTheme({
 }));
 
 
-log.setLevel("debug");
+log.setLevel("error");
 
 function App() {
   const classes = useStyles();
